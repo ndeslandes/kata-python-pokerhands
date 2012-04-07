@@ -31,6 +31,7 @@ class PokerSolverTest(unittest.TestCase):
 
     def test_solve_withStraight(self):
         self.assertEquals(self.solver.solve('Black: 2H 3D 4S 5C 6D  White: 2D 3H 5C 9S KH'), 'black')
+        self.assertEquals(self.solver.solve('Black: 2H 3D 4S 5C 6D  White: TD JH QC KS AH'), 'white')
 
 if __name__ == '__main__':
     unittest.main()

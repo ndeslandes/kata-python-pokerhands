@@ -2,7 +2,7 @@ class PokerSolver(object):
     def __init__(self):
         pass
         
-    cards = {'2':1, '3':2, '4':3, '5':4, '6':5, '7':6, '8':7, '9':8, 'T':9, 'J':10, 'Q':11, 'K':12, 'A':13}
+    cards = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, 'T':10, 'J':11, 'Q':12, 'K':13, 'A':14}
     hands = {'nothing':None, 'high_card':1, 'pair':2, 'two_pairs':3, 'three_of_a_kind':4, 'straight':5, 'flush':6, 'full_house':7, 'four_of_a_kind':8, 'straight_flush':9}
     
     def solve(self, hand):
@@ -31,20 +31,27 @@ class PokerSolver(object):
             return (self.hands['three_of_a_kind'], self._detect_three_of_a_kind(hand))
         if self._detect_two_pairs(hand):
             return (self.hands['two_pairs'], self._detect_two_pairs(hand))
-        if self._detect_pairs(hand):
-            return (self.hands['pair'], self._detect_pairs(hand))
+        if self._detect_pair(hand):
+            return (self.hands['pair'], self._detect_pair(hand))
         if self._detect_high_card(hand):
             return (self.hands['high_card'], self._detect_high_card(hand))
         return (self.hands['nothing'], None)
+    
+    def _convert_in_value(self, hand):
+        hand_in_value = []
+        for card in hand:
+            hand_in_value.append(self.cards[card[0]])
+        return hand_in_value
 
     def _detect_high_card(self, hand):
-        high_card = 0
-        for card in hand:
-            if self.cards[card[0]] > high_card:
-                high_card = self.cards[card[0]]
+        hand_in_value = self._convert_in_value(hand)
+        high_card = None
+        for card in hand_in_value:
+            if card > high_card:
+                high_card = card
         return high_card
 
-    def _detect_pairs(self, hand):
+    def _detect_pair(self, hand):
         counter = dict([(card, 0) for card in self.cards.viewkeys()]) 
         for card in hand:
             counter[card[0]] += 1
@@ -70,9 +77,12 @@ class PokerSolver(object):
             if counter[card[0]] == 3:
                 return self.cards[card[0]]
         return None
-    
+
     def _detect_straight(self, hand):
-        counter = dict([(card, 0) for card in self.cards.keys()])
-        for card in hand:
-            counter[card[0]] += 1
+        hand_in_value = self._convert_in_value(hand)
+        hand_in_value = list(set(hand_in_value))
+        hand_in_value.sort()
+        if len(hand_in_value) == 5:
+            if hand_in_value[4]-hand_in_value[0] == 4:
+                return hand_in_value[4]
         return None
