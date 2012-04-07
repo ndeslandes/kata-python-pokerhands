@@ -21,7 +21,7 @@ class PokerSolverTest(unittest.TestCase):
     
     def test_solve_withTwoPair(self):
         self.assertEquals(self.solver.solve('Black: 2H 2D 5S 5C KD  White: 2D 3H 5C 9S KH'), 'Black')
-        self.assertEquals(self.solver.solve('Black: 2H 2D 5S 5C KD  White: 2D 3H 5C KS KH'), 'Black')
+        self.assertEquals(self.solver.solve('Black: 2H 2D 5S 5C KD  White: 2D 3H 5C KS KH'), 'White')
         self.assertEquals(self.solver.solve('Black: 2H 2D 5S 5C KD  White: 2D 5H 5C KS KH'), 'White')
         self.assertEquals(self.solver.solve('Black: 2H 5D 5S KC KD  White: 2D 5H 5C KS KH'), 'tie')
         
@@ -54,6 +54,9 @@ class PokerSolverTest(unittest.TestCase):
         
     def test_solve_withOtherName(self):
         self.assertEquals(self.solver.solve('Nicolas: 2H 3D 4S 5C 6D  Sebastien: 2H 3H 4H 5H 6H'), 'Sebastien')
+
+    def test_solve_withFalseCard(self):
+        self.assertRaises(ValueError, self.solver.solve, 'Black: 2H YD 2S 2C KD  White: 3D 3H 5C 9S KH')
 
 if __name__ == '__main__':
     unittest.main()
